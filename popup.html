@@ -2,21 +2,20 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Hello Extensions</title>
+  <title>Record audio</title>
   <style>
     body {
-      width: 250px;
+      width: 280px;
       padding: 10px;
       font-family: Arial, sans-serif;
     }
   </style>
 </head>
 <body>
-  <h1>Hello World</h1>
-  <p>This is my first Chrome extension.</p>
-  <button id="sendBtn">Send to background</button>
-  <button id="getTabBtn">Get current tab URL</button>
-  <button id="captureBtn">Capture audio</button>
+  <h1>Record tab audio</h1>
+  <button id="captureBtn">Capture tab audio</button>
+  <button id="recordBtn" disabled>Record 5s audio</button>
+  <button id="stopBtn" disabled>Stop recording</button>
 
   <script src="popup.js"></script>
 </body>
