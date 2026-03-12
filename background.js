@@ -1,4 +1,12 @@
+// Day 6: Modify background.js to receive the audio blob from popup.js(ofc)
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+
+    if (request.type === "AUDIO_READY") {
+    // Just log for now, will do other things later
+    console.log("New audio ready in popup:", request);
+    sendResponse({ ok: true, type: "AUDIO_READY_ACK" });
+  }
   
   if (request.type === "POPUP_CLICK") {
     console.log("Popup clicked!");

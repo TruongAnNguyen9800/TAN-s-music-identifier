@@ -1,6 +1,9 @@
+// Day 6: Modify popup.js so that it send the audio blob to background.js
+
 let currentCaptureStream = null;
 let mediaRecorder = null;
 let recordedChunks = [];
+let currentAudioBlob = null; // The audio blob is stored here
 
 document.addEventListener("DOMContentLoaded", function () {
   const captureBtn = document.getElementById("captureBtn");
@@ -82,13 +85,24 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     };
 
-    mediaRecorder.onstop = () => {
-      const blob = new Blob(recordedChunks, { type: "audio/webm;codecs=opus" });
-      console.log("Recording stopped, final blob size:", blob.size, "bytes");
+mediaRecorder.onstop = () => {
+  const blob = new Blob(recordedChunks, { type: "audio/webm;codecs=opus" });
+  console.log("Recording stopped, final blob size:", blob.size, "bytes");
 
-      // Log
-      console.log("Recorded audio blob ready to send to API:", blob);
-    };
+  // Store the blob
+  currentAudioBlob = blob;
+
+  // Notify background that a new audio is ready
+  chrome.runtime.sendMessage({
+    type: "AUDIO_READY",
+    size: blob.size,
+    mimeType: blob.type,
+  });
+
+  // Log
+  console.log("Recorded audio blob ready to send to API:", blob);
+};
+
 
     mediaRecorder.start();
 
