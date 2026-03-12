@@ -10,5 +10,6 @@ This Chorme extension is my personal project (cuz I'm just unemployed and don't 
 
 ## Progression
 
-- Day 1 - Day 5: Make a basic extension that can send background message, require permission and record + store short audio chunks(/blobs).
+- Day 1 - Day 5(Yeah I was too lazy to note this since day 1 so...): Make a basic extension that can send background message, require permission and record + store short audio chunks(/blobs).
 - Day 6: Learn how to send those blobs from popup.js to background.js to do other stuffs later.
+- Day 7: Learn how to covert the recorded audio(blobs) to ArrayBuffer then send it to background.js.

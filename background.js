@@ -7,6 +7,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log("New audio ready in popup:", request);
     sendResponse({ ok: true, type: "AUDIO_READY_ACK" });
   }
+
+    if (request.type === "AUDIO_DATA") {
+    console.log("Audio data received in background:");
+    console.log("Size:", request.size, "bytes");
+    console.log("MIME type:", request.mimeType);
+
+    // Reconstruct the typed array
+    const audioArray = new Uint8Array(request.buffer);
+    const audioArrayBuffer = audioArray.buffer;
+
+    // Send a response
+    sendResponse({
+      ok: true,
+      type: "AUDIO_DATA_ACK",
+      receivedBytes: audioArrayBuffer.byteLength,
+    });
+  }
   
   if (request.type === "POPUP_CLICK") {
     console.log("Popup clicked!");

@@ -85,24 +85,33 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     };
 
-mediaRecorder.onstop = () => {
+mediaRecorder.onstop = async () => {
   const blob = new Blob(recordedChunks, { type: "audio/webm;codecs=opus" });
   console.log("Recording stopped, final blob size:", blob.size, "bytes");
 
-  // Store the blob
-  currentAudioBlob = blob;
+  // Convert audio Blob to ArrayBuffer
+  const arrayBuffer = await blob.arrayBuffer();
+  console.log("Audio as ArrayBuffer, size:", arrayBuffer.byteLength, "bytes");
 
-  // Notify background that a new audio is ready
-  chrome.runtime.sendMessage({
-    type: "AUDIO_READY",
-    size: blob.size,
-    mimeType: blob.type,
-  });
+  // Send the ArrayBuffer to background
+  chrome.runtime.sendMessage(
+    {
+      type: "AUDIO_DATA",
+      buffer: new Uint8Array(arrayBuffer),
+      mimeType: blob.type,
+      size: arrayBuffer.byteLength,
+    },
+    (response) => {
+      if (chrome.runtime.lastError) {
+        console.error("Error sending audio data:", chrome.runtime.lastError.message);
+      } else {
+        console.log("Background acknowledged audio data:", response);
+      }
+    }
+  );
 
-  // Log
   console.log("Recorded audio blob ready to send to API:", blob);
 };
-
 
     mediaRecorder.start();
 
